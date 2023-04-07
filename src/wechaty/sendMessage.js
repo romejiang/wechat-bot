@@ -1,5 +1,6 @@
 // import { getChatGPTReply as getReply } from '../chatgpt/index.js'
-import { getOpenAiReply as getReply } from '../openai/index.js'
+// import { getOpenAiReply as getReply } from '../openai/index.js'
+import { getServerReply as getReply } from '../gptserver/index.js'
 import { botName, roomWhiteList, aliasWhiteList } from '../../config.js'
 
 /**
@@ -22,22 +23,26 @@ export async function defaultMessage(msg, bot) {
   const isAlias = aliasWhiteList.includes(remarkName) || aliasWhiteList.includes(name) // 发消息的人是否在联系人白名单内
   const isBotSelf = botName === remarkName || botName === name // 是否是机器人自己
   // TODO 你们可以根据自己的需求修改这里的逻辑
+  // 是文本，但不是机器人自己
   if (isText && !isBotSelf) {
     console.log(JSON.stringify(msg))
-    if ((Date.now() - 1e3 * msg.payload.timestamp) > 3000) return 
-    if (!content.startsWith('? ') && !content.startsWith('？ ') && !content.startsWith('> ')) return 
+    // 防止长时间之前的消息被回复
+    if (Date.now() - 1e3 * msg.payload.timestamp > 3000) return
+
+    if (!content.startsWith('? ') && !content.startsWith('？ ') && !content.startsWith('> ')) return
     try {
+      // 聊天内容太短，也无视
       const trimed = content.substr(2)
-      if (trimed.length < 5) return 
-      
+      if (trimed.length < 5) return
+
       // 区分群聊和私聊
       if (isRoom && room) {
-        await room.say(await getReply(trimed.replace(`${botName}`, '')))
+        await room.say(await getReply(trimed.replace(`${botName}`, ''), alias))
         return
       }
       // 私人聊天，白名单内的直接发送
       if (isAlias && !room) {
-        await contact.say(await getReply(trimed))
+        await contact.say(await getReply(trimed, alias))
       }
     } catch (e) {
       console.error(e)
