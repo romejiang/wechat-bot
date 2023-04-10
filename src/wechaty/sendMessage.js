@@ -27,11 +27,11 @@ export async function defaultMessage(msg, bot) {
   // console.log('>>>', isText, isBotSelf, isRoom, isAlias, content)
   // 是文本，但不是机器人自己
   if (isText && !isBotSelf) {
-    console.log(JSON.stringify(msg, null, 2))
     // 防止长时间之前的消息被回复
     if (Date.now() - 1e3 * msg.payload.timestamp > 6000) return
     // if (!content.startsWith('? ') && !content.startsWith('？ ') && !content.startsWith('> ')) return
     try {
+      console.log(JSON.stringify(msg, null, 2))
       // 聊天内容太短，也无视
       const trimed = content.trim()
       // if (trimed.length < 5) return
