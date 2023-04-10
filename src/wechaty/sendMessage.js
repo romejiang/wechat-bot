@@ -23,18 +23,18 @@ export async function defaultMessage(msg, bot) {
   const isAlias = aliasWhiteList.includes(remarkName) || aliasWhiteList.includes(name) // 发消息的人是否在联系人白名单内
   const isBotSelf = botName === remarkName || botName === name // 是否是机器人自己
   // TODO 你们可以根据自己的需求修改这里的逻辑
+  // console.log('>>>', botName, alias, remarkName, name)
+  // console.log('>>>', isText, isBotSelf, isRoom, isAlias, content)
   // 是文本，但不是机器人自己
   if (isText && !isBotSelf) {
-    console.log(JSON.stringify(msg))
+    console.log(JSON.stringify(msg, null, 2))
     // 防止长时间之前的消息被回复
-    if (Date.now() - 1e3 * msg.payload.timestamp > 3000) return
-
-    if (!content.startsWith('? ') && !content.startsWith('？ ') && !content.startsWith('> ')) return
+    if (Date.now() - 1e3 * msg.payload.timestamp > 6000) return
+    // if (!content.startsWith('? ') && !content.startsWith('？ ') && !content.startsWith('> ')) return
     try {
       // 聊天内容太短，也无视
-      const trimed = content.substr(2)
-      if (trimed.length < 5) return
-
+      const trimed = content.trim()
+      // if (trimed.length < 5) return
       // 区分群聊和私聊
       if (isRoom && room) {
         await room.say(await getReply(trimed.replace(`${botName}`, ''), alias))
