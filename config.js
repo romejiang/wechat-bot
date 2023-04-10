@@ -2,7 +2,7 @@
 export const botName = 'Stephen'
 
 // 群聊白名单，白名单内的群聊才会自动回复
-export const roomWhiteList = ['群名称']
+export const roomWhiteList = ['未来已来']
 
 // 联系人白名单，白名单内的联系人才会自动回复
-export const aliasWhiteList = ['备注名或微信名', '媛媛', 'ChatGPT']
+export const aliasWhiteList = ['备注名或微信名', 'ChatGPT']

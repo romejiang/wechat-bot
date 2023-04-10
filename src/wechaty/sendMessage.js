@@ -37,7 +37,7 @@ export async function defaultMessage(msg, bot) {
       // if (trimed.length < 5) return
       // 区分群聊和私聊
       if (isRoom && room) {
-        await room.say(await getReply(trimed.replace(`${botName}`, ''), alias))
+        await room.say(await getReply(trimed.replace(`@${botName}`, ''), alias))
         return
       }
       // 私人聊天，白名单内的直接发送
