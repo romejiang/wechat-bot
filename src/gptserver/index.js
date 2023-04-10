@@ -6,7 +6,7 @@ import stripMarkdown from 'strip-markdown'
 
 const env = dotenv.config().parsed // 环境参数
 
-const baseURL = 'http://localhost:3001/api/v1/chat'
+const baseURL = env.GPTSERVER + '/api/v1/chat'
 
 export async function getServerReply(prompt, user) {
   const timestamp = new Date().getTime()
@@ -23,11 +23,12 @@ export async function getServerReply(prompt, user) {
         content: prompt,
       },
       timeout: {
-        request: 20 * 1000,
+        request: 60 * 1000,
       },
     })
     .json()
   if (response && response.data) {
+    // console.log('response', response.data);
     const reply = markdownToText(response.data.answer)
     return reply
   }
